@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Game of Life</title>
+  <link rel="stylesheet" href="gameOfLife.css">
+</head>
+
+<body>
+  <div id="canvas"></div>
+  <div id="buttons">
+    <button id="start">Start</button>
+    <button id="clear">Clear</button>
+    <button id="random">Random</button>
+  </div>
+
+  <script>
+    const width = 30, height = 15;
+    let canvas = document.querySelector("#canvas");
+    let cells = [];
+
+    // Создание Canvas
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.addEventListener("click", () => {
+          cell.classList.toggle("alive");
+        });
+
+        canvas.appendChild(cell);
+        cells.push(cell);
+      }
+    }
+
+    // Массив живых клеток
+    function canvasFromCells() {
+      return cells.map(cell => cell.classList.contains("alive"));
+    }
+
+    // Массив 
+    function cellsFromCanvas(canvas) {
+      canvas.forEach((alive, i) => {
+        if (alive) cells[i].classList.add("alive");
+        else cells[i].classList.remove("alive");
+      });
+    }
+
+    // Анализ ближних клеток
+    function countNeighbors(canvas, x, y) {
+      let count = 0;
+      for (let y1 = Math.max(0, y - 1); y1 <= Math.min(height - 1, y + 1); y1++) {
+        for (let x1 = Math.max(0, x - 1); x1 <= Math.min(width - 1, x + 1); x1++) {
+          if ((x1 != x || y1 != y) && canvas[x1 + y1 * width]) {
+            count++;
+          }
+        }
+      }
+      return count;
+    }
+
+    // Следующая генерация
+    function nextGeneration(canvas) {
+      let newCanvas = new Array(width * height);
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          let neighbors = countNeighbors(canvas, x, y)
+          let offset = x + y * width
+          if (neighbors < 2 || neighbors > 3) {
+            newCanvas[offset] = false
+          } else if (neighbors === 2) {
+            newCanvas[offset] = canvas[offset]
+          } else {
+            newCanvas[offset] = true
+          }
+        }
+      }
+      return newCanvas
+    }
+
+    //
+    function turn() {
+      cellsFromCanvas(nextGeneration(canvasFromCells()));
+    }
+
+    // Нажатие кнопки Random
+    document.querySelector("#random").addEventListener("click", function () {
+      function randomCanvas() {
+        return Array.from({ length: width * height }, () => Math.random() < 0.3)
+      }
+      cellsFromCanvas(randomCanvas())
+    })
+
+    // Нажатие кнопки Start
+    let running = false
+    document.querySelector("#start").addEventListener("click", function (e) {
+      if (running) {
+        e.target.textContent = "Start"
+        e.target.style.background = "green";
+        clearInterval(running)
+        running = false
+      } else {
+        e.target.textContent = "Stop"
+        e.target.style.background = "red";
+        running = setInterval(() => turn(), 400);
+      }
+    })
+
+    // Нажатие кнопки Clear
+    document.querySelector("#clear").addEventListener("click", function () {
+      cells.forEach(cell => {
+        cell.classList.remove("alive");
+      })
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 700px;
+    margin: 0;
+  }
+
+  #canvas {
+    display: grid;
+    grid-template-columns: repeat(30, 20px);
+    grid-template-rows: repeat(15, 20px);
+    gap: 3px;
+    background-color: #ddd;
+    width: auto;
+    margin: auto;
+  }
+
+  .cell {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+  }
+
+  .alive {
+    background-color: black;
+  }
+
+  #buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 50px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-right: 10px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
