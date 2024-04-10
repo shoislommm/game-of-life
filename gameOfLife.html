@@ -95,12 +95,12 @@
     document.querySelector("#start").addEventListener("click", function (e) {
       if (running) {
         e.target.textContent = "Start"
-        e.target.style.background = "green";
+        e.target.style.background = "black";
         clearInterval(running)
         running = false
       } else {
         e.target.textContent = "Stop"
-        e.target.style.background = "red";
+        e.target.style.background = "#666666";
         running = setInterval(() => turn(), 400);
       }
     })
